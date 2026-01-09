@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - main
+      - build
     paths-ignore:
       - docs
       - code-style
@@ -20,12 +21,16 @@ jobs:
       id-token: write
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: main
+
       - name: 'Login to GitHub Container Registry'
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+  
       - uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
