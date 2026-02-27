@@ -1,0 +1,12 @@
+version: "1"
+rules:
+  - base: main
+    upstream: swedenconnect:main
+    mergeMethod: merge
+    mergeUnstable: false
+    assignees:
+      - scheibling
+    reviewers:
+      - scheibling
+label: ":arrow_heading_down: pull" # Optional
+conflictLabel: "merge-conflict" # Optional, on merge conflict assign a custom label, Default: merge-conflict
