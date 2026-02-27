@@ -1,0 +1,40 @@
+name: Automated Docker Build
+on:
+  push:
+    branches:
+      - hoglandet
+    paths-ignore:
+      - docs
+      - code-style
+      - samples
+      - scripts
+      - .github
+
+jobs:
+  build-docker:
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
+      attestations: write
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 'Login to GitHub Container Registry'
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+          cache: 'maven'
+
+      - run: |
+            sudo echo "127.0.0.1 local.dev.swedenconnect.se" | sudo tee -a /etc/hosts
+            mvn clean install --no-transfer-progress
+            cd bankid-idp; DOCKER_REPO=ghcr.io/hoglandets-it mvn jib:build

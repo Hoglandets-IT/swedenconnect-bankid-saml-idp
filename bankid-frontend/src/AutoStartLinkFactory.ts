@@ -14,7 +14,7 @@ export function createLink(userAgent: string, token: string, location: string) {
       // Unsupported browser on iphone
       return getDefaultRedirect(token);
     case 'android-phone':
-      return getMobileRedirect(token, location);
+      return getDefaultRedirect(token);
   }
   return getDefaultRedirect(token);
 }
